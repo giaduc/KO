@@ -6,52 +6,41 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+        crossorigin="anonymous">
+
+
 </head>
 
 <body>
-    <!-- <ul data-bind="foreach: pages">
-        <li data-bind="text: $data"></li>
-    </ul>
 
-    <h1 data-bind="text: name"></h1>
-    <input data-bind="value: name, valueUpdate: 'afterkeydown'">
-    <h1 data-bind="text: age"></h1>
-    <input data-bind="value: age, valueUpdate: 'afterkeydown'">
-
-    <p data-bind="event: { mouseover: hello, mouseout: goodbye }"> Mouse over me! </p>
-    <p data-bind="text: helloEnabled"></p>
-    <p data-bind="text: goodbyeEnabled"></p>
-
-    <button data-bind="click: change">Change</button>
-    <button data-bind="click: submit">Submit</button>
-    <button data-bind="click: show">Show Message</button>
-    <button data-bind="click: hide">Hide Message</button>
-    <p data-bind="visible: msg">Hello, Knockout!</p> -->
-    
-    <!-- <ul data-bind="if: msg">
-        <li>
-            <strong>List data:</strong>
-        </li> -->
-        <!-- ko foreach: listData -->
-        <!-- <li>
-            <span data-bind="text: $data.name"></span> -
-            <span data-bind="text: $data.type"></span>
-        </li> -->
-        <!-- /ko -->
-<!-- 
-    </ul> -->
-
-    <!-- <div data-bind="template: { name: 'notes-template', foreach: listData }"></div>
-
-    <script type="text/html" id="notes-template">
-        <div>
-            <h5 data-bind="text: $data.name"></h5>
-            <div data-bind="text: $data.type"></div>
+    <div class="input-container">
+        <input class="todo-input" type="text" data-bind="value: noteToAdd, enterkey: add, valueUpdate: 'afterkeydown'">
+        <button class="todo-button" data-bind="click: add">Add</button>
+    </div>
+    <h2 class="todo-preview" data-bind="text: noteToAdd"></h2>
+    <div class="filter">
+        <a href="#" data-bind="click: todoFilter.bind(this, 'SHOW_ALL'), css: filterState() == 'SHOW_ALL' ? 'filter-active' : ''">Show all</a>
+        <a href="#" data-bind="click: todoFilter.bind(this, 'DOING'), css: filterState() == 'DOING' ? 'filter-active' : ''">Doing</a>
+        <a href="#" data-bind="click: todoFilter.bind(this, 'DONE'), css: filterState() == 'DONE' ? 'filter-active' : ''">Done</a>
+    </div>
+    <div data-bind="if: notes().length > 0">
+        <div class="todo-list" data-bind="foreach: filtered">
+            <div class="todo-item">
+                <a href="#" class="btn-toggle" data-bind="click: $root.toggle">
+                    <i class="fas" data-bind="css: $data.isDone ? 'fa-toggle-off done': 'fa-toggle-on doing'"></i>
+                </a>
+                <div class="todo-content" data-bind="css: $data.isDone ? 'txt-done': ''">
+                    <h1 data-bind="text: $data.text"></h1>
+                    <p data-bind="text: $data.dateTime"></p>
+                </div>
+                <a href="#" class="btn-remove" data-bind="click: $root.remove">
+                    <i class="fas fa-times"></i>
+                </a>
+            </div>
         </div>
-    </script>
-
-    <div data-bind="component: { name: 'first-component', params: {name: 'giaduc'}}"></div>
-    <first-component params="name: msg"></first-component> -->
+    </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>

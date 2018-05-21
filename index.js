@@ -1,70 +1,71 @@
 $(function () {
-    ko.components.register('first-component', {
-        viewModel: function (data) {
-            this.name = (data && data.name) || "none";
-        },
-        template: `<div data-bind="text: name"></div>`
-    })
-
     function AppViewModel() {
-        /* this.pages = ["page1", "page2", "page3"];
-        this.age = ko.observable(39);
-        this.name = ko.observable("Bert");
-        this.helloEnabled = ko.observable();
-        this.goodbyeEnabled = ko.observable();
-        this.msg = ko.observable();
-        this.name.subscribe(function (e) {
-            console.log(e);
+        const self = this;
 
-        });
+        self.noteToAdd = ko.observable('');
+        self.filterState = ko.observable('SHOW_ALL');
 
-        this.listData = ko.observableArray([{
-                name: "Bungle",
-                type: "Bear"
-            },
-            {
-                name: "George",
-                type: "Hippo"
-            },
-            {
-                name: "Zippy",
-                type: "Unknown"
+        self.notes = ko.observableArray([{
+            dateTime: new Date(),
+            text: 'Doing',
+            isDone: false
+        }, {
+            dateTime: new Date(),
+            text: 'Done',
+            isDone: true
+        }]);
+
+        self.filtered = ko.computed(function () {
+            const todoFilters = self.notes();
+            switch (self.filterState()) {
+                case 'SHOW_ALL':
+                    console.log('SHOW_ALL');
+                    return todoFilters;
+                    break;
+                case 'DOING':
+                    console.log('DOING');
+                    return ko.utils.arrayFilter(todoFilters, e => e.isDone === false);
+                    break;
+                case 'DONE':
+                    console.log('DONE');
+                    return ko.utils.arrayFilter(todoFilters, e => e.isDone === true);
+                    break;
+                default:
+                    return todoFilters;
+                    break;
             }
-        ]);
+        })
 
-        this.listData.subscribe(function (e) {
-            console.log(e);
-        });
-
-        this.change = () => {
-            this.age(40).name('aljfiwefadsl');
-            this.listData.push({
-                name: "Bungle",
-                type: "Bear"
-            })
+        self.add = function () {
+            const note = self.noteToAdd().trim();
+            if (note) {
+                self.notes.push({
+                    dateTime: new Date(),
+                    text: note,
+                    isDone: false
+                });
+                self.noteToAdd('');
+            }
         }
 
-        this.hello = () => {
-            this.helloEnabled('Hello!');
-            this.goodbyeEnabled('');
-        }
-        this.goodbye = () => {
-            this.goodbyeEnabled('Goodbye!');
-            this.helloEnabled('');
-        }
-        this.submit = () => {
-            $.ajax("jaljsfjdlfk", () => {
-                console.log('submit');
-
-            })
+        self.toggle = function (todo) {
+            for (const i of self.notes()) {
+                if (i == todo) {
+                    self.notes.replace(i, { ...i,
+                        isDone: !i.isDone
+                    });
+                }
+            }
         }
 
-        this.show = () => {
-            this.msg(true);
+        self.remove = function (todo) {
+            self.notes.remove(todo);
         }
-        this.hide = () => {
-            this.msg(false);
-        } */
+
+        // return ko.utils.arrayFilter(self.notes(), e => e.isDone === false);
+        self.todoFilter = function (param) {
+            self.filterState(param);
+        }
 
     }
     ko.applyBindings(new AppViewModel());

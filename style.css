@@ -1,0 +1,69 @@
+body {
+    width: 900px;
+    margin: 0 auto;
+}
+
+.input-container {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.todo-input,
+.todo-button {
+    padding: 10px;
+}
+
+.todo-preview {
+    text-align: center;
+}
+
+.filter {
+    margin-bottom: 30px;
+}
+
+.filter a {
+    text-decoration: none;
+    font-size: 20px;
+    padding: 10px;
+    color: black;
+}
+
+.filter-active {
+    border-bottom: black solid 3px;
+}
+
+.todo-list {
+    padding: 20px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.todo-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    border-bottom: lightgray solid 1px;
+}
+
+.btn-toggle,
+.btn-remove {
+    border: 0;
+    font-size: 40px;
+}
+
+.doing {
+    color: rgb(122, 221, 122);
+}
+
+.done {
+    color: gainsboro;
+}
+
+.txt-done {
+    text-decoration: line-through;
+    color: gainsboro;
+}
+
+.btn-remove {
+    color: tomato;
+}
