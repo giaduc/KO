@@ -1,4 +1,6 @@
 $(function () {
+
+
     function AppViewModel() {
         const self = this;
 
@@ -34,7 +36,7 @@ $(function () {
                     return todoFilters;
                     break;
             }
-        })
+        });
 
         self.add = function () {
             const note = self.noteToAdd().trim();
@@ -66,7 +68,20 @@ $(function () {
         self.todoFilter = function (param) {
             self.filterState(param);
         }
-
     }
+
+    ko.bindingHandlers.enterKey = {
+        init: function (element, valueAccessor, allBindings, viewModel) {
+            var callback = valueAccessor();
+            $(element).keypress(function (event) {
+                var keyCode = (event.which ? event.which : event.keyCode);
+                if (keyCode === 13) {
+                    callback.call(viewModel);
+                    return false;
+                }
+                return true;
+            });
+        }
+    };
     ko.applyBindings(new AppViewModel());
 })

@@ -27,9 +27,12 @@ body {
     font-size: 20px;
     padding: 10px;
     color: black;
+    box-sizing: border-box;
+    position: relative;
 }
 
-.filter-active {
+.filter-active,
+.filter a:hover {
     border-bottom: black solid 3px;
 }
 

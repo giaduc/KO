@@ -14,18 +14,18 @@
 </head>
 
 <body>
-
+    <h1 class="todo-preview">Todo app with knockoutjs</h1>
     <div class="input-container">
-        <input class="todo-input" type="text" data-bind="value: noteToAdd, enterkey: add, valueUpdate: 'afterkeydown'">
+        <input class="todo-input" type="text" data-bind="value: noteToAdd, enterkey: add, valueUpdate: 'afterkeydown', enterKey: add">
         <button class="todo-button" data-bind="click: add">Add</button>
     </div>
     <h2 class="todo-preview" data-bind="text: noteToAdd"></h2>
-    <div class="filter">
-        <a href="#" data-bind="click: todoFilter.bind(this, 'SHOW_ALL'), css: filterState() == 'SHOW_ALL' ? 'filter-active' : ''">Show all</a>
-        <a href="#" data-bind="click: todoFilter.bind(this, 'DOING'), css: filterState() == 'DOING' ? 'filter-active' : ''">Doing</a>
-        <a href="#" data-bind="click: todoFilter.bind(this, 'DONE'), css: filterState() == 'DONE' ? 'filter-active' : ''">Done</a>
-    </div>
     <div data-bind="if: notes().length > 0">
+        <div class="filter">
+            <a href="#" data-bind="click: todoFilter.bind(this, 'SHOW_ALL'), css: filterState() == 'SHOW_ALL' ? 'filter-active' : ''">Show all</a>
+            <a href="#" data-bind="click: todoFilter.bind(this, 'DOING'), css: filterState() == 'DOING' ? 'filter-active' : ''">Doing</a>
+            <a href="#" data-bind="click: todoFilter.bind(this, 'DONE'), css: filterState() == 'DONE' ? 'filter-active' : ''">Done</a>
+        </div>
         <div class="todo-list" data-bind="foreach: filtered">
             <div class="todo-item">
                 <a href="#" class="btn-toggle" data-bind="click: $root.toggle">
@@ -45,6 +45,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/knockout/3.4.2/knockout-min.js"></script>
     <script src="index.js"></script>
+    <script></script>
 </body>
 
 </html>
