@@ -1,5 +1,35 @@
 $(function () {
+    // Initialize Firebase
+    const config = {
+        apiKey: "AIzaSyDTIIuq2IGX0DiC0vlXRXhMIlkqR9SiaMM",
+        authDomain: "kojs-5d4b5.firebaseapp.com",
+        databaseURL: "https://kojs-5d4b5.firebaseio.com",
+        projectId: "kojs-5d4b5",
+        storageBucket: "",
+        messagingSenderId: "330502810409"
+    };
+    firebase.initializeApp(config);
+    const db = firebase.database();
+    const ref = db.ref('TODO');
+    // ref.on('value', snapshot => {
+    //     snapshot.forEach(childSnapshot => {
+    //         console.log(childSnapshot.val());
+    //     });
+    // });
 
+    /* add to firebase */
+    const addToFirebase = todo => {
+        ref.push(todo);
+        ref.on('value', snapshot => {
+            snapshot.forEach(childSnapshot => {
+                var obja = {
+                    key: childSnapshot.key,
+                    value: childSnapshot.val()
+                };
+                console.log(obja);
+            });
+        });
+    }
 
     function AppViewModel() {
         const self = this;
@@ -7,29 +37,29 @@ $(function () {
         self.noteToAdd = ko.observable('');
         self.filterState = ko.observable('SHOW_ALL');
 
-        self.notes = ko.observableArray([{
-            dateTime: new Date(),
-            text: 'Doing',
-            isDone: false
-        }, {
-            dateTime: new Date(),
-            text: 'Done',
-            isDone: true
-        }]);
-
+        self.notes = ko.observableArray([]);
+        ref.on('value', snapshot =>{
+            self.notes([]);
+            snapshot.forEach(childSnapshot => {
+                var d = childSnapshot.val()
+                debugger
+                self.notes.push(d)
+            }
+                
+        )
+        debugger
+    }
+    );
         self.filtered = ko.computed(function () {
             const todoFilters = self.notes();
             switch (self.filterState()) {
                 case 'SHOW_ALL':
-                    console.log('SHOW_ALL');
                     return todoFilters;
                     break;
                 case 'DOING':
-                    console.log('DOING');
                     return ko.utils.arrayFilter(todoFilters, e => e.isDone === false);
                     break;
                 case 'DONE':
-                    console.log('DONE');
                     return ko.utils.arrayFilter(todoFilters, e => e.isDone === true);
                     break;
                 default:
@@ -41,11 +71,12 @@ $(function () {
         self.add = function () {
             const note = self.noteToAdd().trim();
             if (note) {
-                self.notes.push({
-                    dateTime: new Date(),
+                const todoAdd = {
+                    created: firebase.database.ServerValue.TIMESTAMP,
                     text: note,
                     isDone: false
-                });
+                }
+                addToFirebase(todoAdd);
                 self.noteToAdd('');
             }
         }
@@ -64,7 +95,6 @@ $(function () {
             self.notes.remove(todo);
         }
 
-        // return ko.utils.arrayFilter(self.notes(), e => e.isDone === false);
         self.todoFilter = function (param) {
             self.filterState(param);
         }
