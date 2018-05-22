@@ -1,6 +1,7 @@
 body {
     width: 900px;
     margin: 0 auto;
+    font-family: 'Oxygen', sans-serif;
 }
 
 .input-container {
@@ -42,14 +43,28 @@ body {
 }
 
 .todo-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
+    display: grid;
+    grid-template-columns: 100px 1fr 100px;
     border-bottom: lightgray solid 1px;
+}
+
+.todo-content {
+    padding: 15px;
+}
+
+.todo-content h2 {
+    margin: 0;
+    margin-bottom: 10px;
+}
+
+.todo-content b {
+    padding-right: 15px;
 }
 
 .btn-toggle,
 .btn-remove {
+    align-self: center;
+    justify-self: center;
     border: 0;
     font-size: 40px;
 }

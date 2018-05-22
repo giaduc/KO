@@ -11,45 +11,37 @@ $(function () {
     firebase.initializeApp(config);
     const db = firebase.database();
     const ref = db.ref('TODO');
-    // ref.on('value', snapshot => {
-    //     snapshot.forEach(childSnapshot => {
-    //         console.log(childSnapshot.val());
-    //     });
-    // });
 
     /* add to firebase */
-    const addToFirebase = todo => {
+    const addToFirebase = text => {
+        const todo = {
+            created: firebase.database.ServerValue.TIMESTAMP,
+            isDone: false,
+            text
+        };
         ref.push(todo);
-        ref.on('value', snapshot => {
-            snapshot.forEach(childSnapshot => {
-                var obja = {
-                    key: childSnapshot.key,
-                    value: childSnapshot.val()
-                };
-                console.log(obja);
-            });
-        });
-    }
+    };
 
     function AppViewModel() {
         const self = this;
 
         self.noteToAdd = ko.observable('');
         self.filterState = ko.observable('SHOW_ALL');
+        self.isLoading = ko.observable(false);
 
         self.notes = ko.observableArray([]);
-        ref.on('value', snapshot =>{
+
+        ref.on('value', async snapshot => {
+            self.isLoading(true);
             self.notes([]);
-            snapshot.forEach(childSnapshot => {
-                var d = childSnapshot.val()
-                debugger
-                self.notes.push(d)
-            }
-                
-        )
-        debugger
-    }
-    );
+            await snapshot.forEach(c => {
+                const d = c.val();
+                d.created = new Date(d.created);
+                self.notes.push(d);
+            });
+            self.isLoading(false);
+        });
+
         self.filtered = ko.computed(function () {
             const todoFilters = self.notes();
             switch (self.filterState()) {
@@ -69,14 +61,9 @@ $(function () {
         });
 
         self.add = function () {
-            const note = self.noteToAdd().trim();
-            if (note) {
-                const todoAdd = {
-                    created: firebase.database.ServerValue.TIMESTAMP,
-                    text: note,
-                    isDone: false
-                }
-                addToFirebase(todoAdd);
+            const t = self.noteToAdd().trim();
+            if (t) {
+                addToFirebase(t);
                 self.noteToAdd('');
             }
         }

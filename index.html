@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Oxygen" rel="stylesheet">
     <title>Toto app with Knockoutjs</title>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
@@ -19,7 +20,8 @@
         <button class="todo-button" data-bind="click: add">Add</button>
     </div>
     <h2 class="todo-preview" data-bind="text: noteToAdd"></h2>
-    <div data-bind="if: notes().length > 0">
+    <div class="loading" data-bind="if: notes().length && isLoading()">Loading...</div>
+    <div data-bind="if: notes().length > 0 && !isLoading()">
         <div class="filter">
             <a href="#" data-bind="click: todoFilter.bind(this, 'SHOW_ALL'), css: filterState() == 'SHOW_ALL' ? 'filter-active' : ''">Show all</a>
             <a href="#" data-bind="click: todoFilter.bind(this, 'DOING'), css: filterState() == 'DOING' ? 'filter-active' : ''">Doing</a>
@@ -31,8 +33,10 @@
                     <i class="fas" data-bind="css: $data.isDone ? 'fa-toggle-off done': 'fa-toggle-on doing'"></i>
                 </a>
                 <div class="todo-content" data-bind="css: $data.isDone ? 'txt-done': ''">
-                    <h1 data-bind="text: $data.text"></h1>
-                    <p data-bind="text: $data.dateTime"></p>
+                    <h2 data-bind="text: $data.text"></h2>
+                    <b data-bind="text: $data.created.toLocaleTimeString()"></b>
+                    <span data-bind="text: $data.created.toLocaleDateString()">
+                    </span>
                 </div>
                 <a href="#" class="btn-remove" data-bind="click: $root.remove">
                     <i class="fas fa-times"></i>
