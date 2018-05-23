@@ -32,7 +32,7 @@
                 <a href="#" class="btn-toggle" data-bind="click: $root.toggle">
                     <i class="fas" data-bind="css: $data.isDone ? 'fa-toggle-off done': 'fa-toggle-on doing'"></i>
                 </a>
-                <div class="todo-content" data-bind="css: $data.isDone ? 'txt-done': ''">
+                <div class="todo-content" data-bind="click: $root.getTodo, css: $data.isDone ? 'txt-done': ''">
                     <h2 data-bind="text: $data.text"></h2>
                     <b data-bind="text: $data.created.toLocaleTimeString()"></b>
                     <span data-bind="text: $data.created.toLocaleDateString()">

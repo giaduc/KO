@@ -50,6 +50,11 @@ body {
 
 .todo-content {
     padding: 15px;
+    cursor: pointer;
+}
+
+.todo-content:hover {
+    opacity: .7;
 }
 
 .todo-content h2 {

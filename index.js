@@ -14,13 +14,32 @@ $(function () {
 
     /* add to firebase */
     const addToFirebase = text => {
+        const key = ref.push().key;
         const todo = {
             created: firebase.database.ServerValue.TIMESTAMP,
             isDone: false,
-            text
+            text,
+            key
         };
-        ref.push(todo);
+        ref.child(key).set(todo);
     };
+
+    /* remove from firebase */
+    const removeFromFirebase = key => {
+        ref.child(key).remove();
+    }
+
+    /* update firebase */
+    const updateFirebase = (key, todo) => {
+        const testObj = {
+            created: 1527041430280,
+            isDone: true,
+            text: 'updated',
+            key: '-LD9kl88OJM8MBAHyav4'
+        }
+        ref.child(key).update(todo);
+    }
+
 
     function AppViewModel() {
         const self = this;
@@ -42,7 +61,7 @@ $(function () {
             self.isLoading(false);
         });
 
-        self.filtered = ko.computed(function () {
+        self.filtered = ko.computed(() => {
             const todoFilters = self.notes();
             switch (self.filterState()) {
                 case 'SHOW_ALL':
@@ -60,7 +79,7 @@ $(function () {
             }
         });
 
-        self.add = function () {
+        self.add = () => {
             const t = self.noteToAdd().trim();
             if (t) {
                 addToFirebase(t);
@@ -68,29 +87,32 @@ $(function () {
             }
         }
 
-        self.toggle = function (todo) {
-            for (const i of self.notes()) {
-                if (i == todo) {
-                    self.notes.replace(i, { ...i,
-                        isDone: !i.isDone
-                    });
-                }
-            }
+        self.toggle = todo => {
+            const todoToUpdate = {
+                ...todo,
+                isDone: !todo.isDone
+            };
+            updateFirebase(todo.key, todoToUpdate);
         }
 
-        self.remove = function (todo) {
-            self.notes.remove(todo);
+        self.remove = todo => {
+            removeFromFirebase(todo.key);
         }
 
-        self.todoFilter = function (param) {
+        self.getTodo = todo => {
+            console.log(todo);
+            
+        }
+
+        self.todoFilter = param => {
             self.filterState(param);
         }
     }
 
     ko.bindingHandlers.enterKey = {
-        init: function (element, valueAccessor, allBindings, viewModel) {
+        init: (element, valueAccessor, allBindings, viewModel) => {
             var callback = valueAccessor();
-            $(element).keypress(function (event) {
+            $(element).keypress(event => {
                 var keyCode = (event.which ? event.which : event.keyCode);
                 if (keyCode === 13) {
                     callback.call(viewModel);
